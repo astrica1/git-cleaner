@@ -78,3 +78,24 @@ func (r Repository) GetTagBranch(tagID string) []string {
 
 	return branchesList
 }
+
+func (r Repository) GetAllTagsList() []string {
+	cmd := "git tag --list | xargs -n1 echo"
+	tags, err := Execute(cmd)
+	if err != nil {
+		return nil
+	}
+	tagsList := strings.Split(tags, "\n")
+	return tagsList[:len(tagsList)-1]
+}
+
+func (r Repository) GetAllTags() []string {
+	cmd := "git for-each-ref --sort=-creatordate --format '%(creatordate:iso8601) %(refname:short)' refs/tags"
+	tags, err := Execute(cmd)
+	if err != nil {
+		return nil
+	}
+
+	tagsList := strings.Split(tags, "\n")
+	return tagsList[:len(tagsList)-1]
+}
