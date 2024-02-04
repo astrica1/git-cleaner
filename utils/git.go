@@ -42,3 +42,39 @@ func (r *Repository) RemoveBranch(branchName string) error {
 	_, err = Execute(cmd)
 	return err
 }
+
+func (r Repository) RemoveTag(tagName string) error {
+	cmd := "git push --delete origin " + tagName
+	_, err := Execute(cmd)
+	return err
+}
+
+func (r Repository) GetTagBranch(tagID string) []string {
+	cmd := "git branch -a --contains " + tagID
+	branches, err := Execute(cmd)
+	if err != nil || branches == "" {
+		return nil
+	}
+
+	branchesList := strings.Split(branches, "\n")
+	branchesList = branchesList[:len(branchesList)-1]
+
+	for i, b := range branchesList {
+		println(b)
+		if strings.HasSuffix(b, "main") && len(b) < 8 {
+			branchesList[i] = "main"
+			continue
+		}
+
+		if strings.Contains(b, "HEAD ->") {
+			branchesList = append(branchesList[:i], branchesList[i+1:]...)
+		}
+
+		tmp := strings.Split(b, "origin/")
+		if len(tmp) > 1 {
+			branchesList[i] = strings.Join(tmp[1:], "origin/")
+		}
+	}
+
+	return branchesList
+}
