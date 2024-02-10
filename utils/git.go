@@ -4,19 +4,19 @@ import "strings"
 
 type Repository string
 
-func (r *Repository) Clone() error {
-	cmd := "git clone " + string(*r)
+func (r Repository) Clone() error {
+	cmd := "git clone " + string(r)
 	_, err := Execute(cmd)
 	return err
 }
 
-func (r *Repository) Fetch() error {
+func (Repository) Fetch() error {
 	cmd := "git fetch origin"
 	_, err := Execute(cmd)
 	return err
 }
 
-func (r *Repository) BranchList() []string {
+func (Repository) BranchList() []string {
 	cmd := "for branch in `git branch -r | grep -v HEAD`;do echo -e `git show --format=\"%ci %cr\" $branch | head -n 1` \t$branch; done | sort -r"
 	branches, err := Execute(cmd)
 	if err != nil {
@@ -31,7 +31,7 @@ func (r *Repository) BranchList() []string {
 	return branchesList
 }
 
-func (r *Repository) RemoveBranch(branchName string) error {
+func (Repository) RemoveBranch(branchName string) error {
 	cmd := "git branch --delete " + branchName
 	_, err := Execute(cmd)
 	if err != nil {
@@ -43,13 +43,13 @@ func (r *Repository) RemoveBranch(branchName string) error {
 	return err
 }
 
-func (r Repository) RemoveTag(tagName string) error {
+func (Repository) RemoveTag(tagName string) error {
 	cmd := "git push --delete origin " + tagName
 	_, err := Execute(cmd)
 	return err
 }
 
-func (r Repository) GetTagBranch(tagID string) []string {
+func (Repository) GetTagBranch(tagID string) []string {
 	cmd := "git branch -a --contains " + tagID
 	branches, err := Execute(cmd)
 	if err != nil || branches == "" {
@@ -79,7 +79,7 @@ func (r Repository) GetTagBranch(tagID string) []string {
 	return branchesList
 }
 
-func (r Repository) GetAllTagsList() []string {
+func (Repository) GetAllTagsList() []string {
 	cmd := "git tag --list | xargs -n1 echo"
 	tags, err := Execute(cmd)
 	if err != nil {
@@ -89,7 +89,7 @@ func (r Repository) GetAllTagsList() []string {
 	return tagsList[:len(tagsList)-1]
 }
 
-func (r Repository) GetAllTags() []string {
+func (Repository) GetAllTags() []string {
 	cmd := "git for-each-ref --sort=-creatordate --format '%(creatordate:iso8601) %(refname:short)' refs/tags"
 	tags, err := Execute(cmd)
 	if err != nil {
