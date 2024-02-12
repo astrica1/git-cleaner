@@ -79,6 +79,16 @@ func (Repository) GetTagBranch(tagID string) []string {
 	return branchesList
 }
 
+func (Repository) GetBranchTags(branchName string) []string {
+	cmd := "git describe --tags $(git rev-list --tags --max-count=150) " + branchName
+	tags, err := Execute(cmd)
+	if err != nil {
+		return nil
+	}
+	tagsList := strings.Split(tags, "\n")
+	return tagsList[:len(tagsList)-1]
+}
+
 func (Repository) GetAllTagsList() []string {
 	cmd := "git tag --list | xargs -n1 echo"
 	tags, err := Execute(cmd)
