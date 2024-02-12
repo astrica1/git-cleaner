@@ -1,0 +1,25 @@
+[
+    {
+        "name": "branch prefix1/scope1",
+        "mails": [
+            "admin1@example.com",
+            "architecture@example.com"
+        ]
+    },
+    {
+        "name": "branch prefix2/scope2",
+        "mails": [
+            "admin2@example.com",
+            "architecture@example.com",
+            "reporter@example.com"
+        ]
+    },
+    {
+        "name": "branch prefix3/scope3",
+        "mails": [
+            "admin3@example.com",
+            "devops1@example.com",
+            "reporter@example.com"
+        ]
+    }
+]
