@@ -11,7 +11,8 @@ func Execute(command string, flags ...string) (string, error) {
 	var cmd *exec.Cmd
 
 	if runtime.GOOS == "windows" {
-		cmd = exec.Command("sh.exe", "-C", command)
+		cmd = exec.Command("cmd.exe", "/c", command)
+		log.Println("It is better to run this application on Linux based systems or containers")
 	} else {
 		cmd = exec.Command("/bin/bash", "-c", command)
 	}
